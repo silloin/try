@@ -144,26 +144,25 @@
   <div class="overlay"></div>
 
   <!-- Unified Header -->
-  <div class="header">
-    <div class="logo">Gk</div>
-    <div class="nav">
-      <a href="https://github.com/silloin" target="_blank">
-        <ion-icon name="logo-github"></ion-icon> GitHub
-      </a>
-      <a href="https://www.kaggle.com/code/silloin23/crop-yield" target="_blank">
-        <ion-icon name="logo-codepen"></ion-icon> Kaggle
-      </a>
-      <a href="{{ url_for('ilovepdf_merged (19).pdf') }}" download="MyDocument.pdf">
-        <ion-icon name="download-outline"></ion-icon> Download STP PDF
-      </a>
-      <a href="{{ url_for(ilovepdf_merged (19).pdf")}} target="_blank">
-        <ion-icon name="document-outline"></ion-icon> View STP PDF
-      </a>
-      <a href="about.html">About</a>
-
-
-    </div>
+<div class="header">
+  <div class="logo">Gk</div>
+  <div class="nav">
+    <a href="https://github.com/silloin" target="_blank">
+      <ion-icon name="logo-github"></ion-icon> GitHub
+    </a>
+    <a href="https://www.kaggle.com/code/silloin23/crop-yield" target="_blank">
+      <ion-icon name="logo-codepen"></ion-icon> Kaggle
+    </a>
+    <!-- ✅ Use route names -->
+    <a href="{{ url_for('download_pdf') }}">
+      <ion-icon name="download-outline"></ion-icon> Download STP PDF
+    </a>
+    <a href="{{ url_for('view_pdf') }}" target="_blank">
+      <ion-icon name="document-outline"></ion-icon> View STP PDF
+    </a>
+    <a href="{{ url_for('about') }}">About</a>
   </div>
+</div>
 
 
     <!-- Start Button -->
@@ -279,6 +278,7 @@
     </script>
   </body>
 </html>
+
 
 
 
