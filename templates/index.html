@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crop Yield Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+      .logo {
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        border-radius: 50%;
+        background-color: #333;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        margin-right: 20px;
+      }
+      body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        padding-top: 120px; /* space for fixed header */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: url('images.jpg') no-repeat center center fixed;
+        background-size: cover;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+      }
+      .center-btn {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+      }
+      .btn-start {
+        border: none;
+        border-radius: 20px;
+        padding: 18px 40px;
+        font-size: 20px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #07f32e, #04f38f);
+        color: #fff;
+        transition: 0.3s;
+      }
+      .btn-start:hover {
+        transform: translateY(-3px);
+        background: linear-gradient(135deg, #0891b2, #2563eb);
+      }
+      .container {
+        display: none;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        margin-top: 100px;
+        padding: 40px;
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1s ease-in-out;
+        width: 560px;
+        position: relative;
+        z-index: 1;
+      }
+      h1 { font-weight: 700; color: #d1fae5; }
+      h2 { font-size: 18px; margin-bottom: 20px; color: #ffe4e6; }
+      .form-control, .form-select, .select2-container--default .select2-selection--single {
+        border-radius: 12px; margin-bottom: 15px; padding: 12px; border: none; outline: none;
+        transition: 0.3s; background: #f9fafb; color: #111827;
+        height: auto;
+      }
+      .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #111827; line-height: 36px;
+      }
+      .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 6px;
+      }
+      .btn-custom {
+        width: 100%; border: none; border-radius: 15px; padding: 14px; font-size: 16px; font-weight: bold;
+        background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; transition: 0.3s;
+      }
+      .btn-custom:hover { transform: translateY(-3px); background: linear-gradient(135deg, #0891b2, #2563eb); }
+      .btn-custom:active { transform: scale(0.97); }
+      .prediction-result {
+        background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 15px; color: #1e3a8a; font-weight: bold;
+        margin-top: 20px; text-align: center; font-size: 18px;
+        display: none;
+      }
+      .header {
+        height: 80px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);/* light transparent */
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+
+      }
+      .nav {
+        display: inline-flex;
+        padding: 12px 24px;
+        gap: 30px;
+        align-items: center;
+        margin-left: 40px;
+      }
+      .nav a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #ffffff;
+        color: #333;
+        font-weight: bold;
+        padding: 8px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .nav a:hover {
+        background-color: #eaeaea;
+        color: #5a0000;
+      }
+      ion-icon { font-size: 18px; }
+      @keyframes fadeIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
+    </style>
+  </head>
+  <body>
+  <div class="overlay"></div>
+
+  <!-- Unified Header -->
+  <div class="header">
+    <div class="logo">Gk</div>
+    <div class="nav">
+      <a href="https://github.com/silloin" target="_blank">
+        <ion-icon name="logo-github"></ion-icon> GitHub
+      </a>
+      <a href="https://www.kaggle.com/code/silloin23/crop-yield" target="_blank">
+        <ion-icon name="logo-codepen"></ion-icon> Kaggle
+      </a>
+      <a href="ilovepdf_merged (19).pdff" download="MyDocument.pdf">
+        <ion-icon name="download-outline"></ion-icon> Download STP PDF
+      </a>
+      <a href="ilovepdf_merged (19).pdf" target="_blank">
+        <ion-icon name="document-outline"></ion-icon> View STP PDF
+      </a>
+      <a href="about.html">About</a>
+
+
+    </div>
+  </div>
+
+
+    <!-- Start Button -->
+    <div class="center-btn">
+      <button class="btn-start" onclick="openForm()">🌾 Crop Prediction</button>
+    </div>
+    
+
+    <!-- Hidden Form -->
+    <div class="container" id="formContainer">
+      <h1 class="text-center mb-2">🌾 Crop Yield Prediction</h1>
+      <h2 class="text-center">Enter Details Below</h2>
+
+      <form id="predictForm" action="/predict" method="post">
+
+        <!-- Year -->
+        <select class="form-select select2" name="Year" required>
+          <option value="disabled selected">-- Select Year --</option>
+          <option>1990</option><option>1991</option><option>1992</option><option>1993</option>
+          <option>1994</option><option>1995</option><option>1996</option><option>1997</option>
+          <option>1998</option><option>1999</option><option>2000</option><option>2001</option>
+          <option>2002</option><option>2004</option><option>2005</option><option>2006</option>
+          <option>2007</option><option>2008</option><option>2009</option><option>2010</option>
+          <option>2011</option><option>2012</option><option>2013</option>
+        </select>
+
+        <!-- Area -->
+        <select class="form-select select2" name="Area" required>
+          <option value="disabled selected">-- Select Area --</option>
+          <option>Albania</option><option>Algeria</option><option>Angola</option><option>Argentina</option>
+          <option>Armenia</option><option>Australia</option><option>Austria</option><option>Azerbaijan</option>
+          <option>Bahamas</option><option>Bahrain</option><option>Bangladesh</option><option>Belarus</option>
+          <option>Belgium</option><option>Botswana</option><option>Brazil</option><option>Bulgaria</option>
+          <option>Burkina Faso</option><option>Burundi</option><option>Cameroon</option><option>Canada</option>
+          <option>Central African Republic</option><option>Chile</option><option>Colombia</option>
+          <option>Croatia</option><option>Denmark</option><option>Dominican Republic</option>
+          <option>Ecuador</option><option>Egypt</option><option>El Salvador</option><option>Eritrea</option>
+          <option>Estonia</option><option>Finland</option><option>France</option><option>Germany</option>
+          <option>Ghana</option><option>Greece</option><option>Guatemala</option><option>Guinea</option>
+          <option>Guyana</option><option>Haiti</option><option>Honduras</option><option>Hungary</option>
+          <option>India</option><option>Indonesia</option><option>Iraq</option><option>Ireland</option>
+          <option>Italy</option><option>Jamaica</option><option>Japan</option><option>Kazakhstan</option>
+        </select>
+
+        <!-- Rainfall -->
+        <select class="form-select select2" name="average_rain_fall_mm_per_year" required>
+          <option value="disabled selected">-- Average Rainfall (mm/yr) --</option>
+          <option>1485</option><option>89</option><option>1010</option><option>591</option><option>562</option>
+          <option>534</option><option>1110</option><option>447</option><option>1292</option><option>83</option>
+          <option>2666</option><option>618</option><option>847</option><option>416</option><option>1761</option>
+          <option>608</option><option>748</option><option>1274</option><option>1604</option><option>537</option>
+          <option>1342</option><option>1522</option><option>3240</option><option>1113</option><option>703</option>
+          <option>1410</option><option>2274</option><option>51</option><option>1784</option><option>383</option>
+          <option>626</option><option>536</option><option>867</option><option>700</option><option>1187</option>
+          <option>652</option><option>1996</option><option>1651</option><option>2387</option><option>1440</option>
+          <option>1976</option><option>589</option><option>1083</option><option>2702</option><option>216</option>
+          <option>1118</option><option>832</option><option>2051</option><option>1668</option><option>250</option>
+        </select>
+
+        <!-- avg_temp manual input -->
+         <input type="number" step="0.01" name="avg_temp" id="avg_temp" class="form-control" placeholder="Avg Temp (°C)" required>
+
+
+        <!-- Crop -->
+        <select class="form-select select2" name="Item" required>
+          <option value="disabled selected">-- Select Crop --</option>
+          <option>Maize</option><option>Potatoes</option><option>Rice, paddy</option><option>Sorghum</option>
+          <option>Soybeans</option><option>Wheat</option><option>Cassava</option><option>Sweet potatoes</option>
+        </select>
+
+        <!-- Pesticides -->
+        <select class="form-select select2" name="pesticides_tonnes" required>
+          <option value=disabled selected"">-- Select Pesticides (Tonnes) --</option>
+          <option>121.0</option><option>201.0</option><option>251.0</option><option>313.96</option><option>376.93</option>
+          <option>439.89</option><option>502.86</option><option>565.82</option><option>628.79</option><option>691.75</option>
+          <option>817.68</option><option>880.64</option><option>943.61</option><option>1006.57</option><option>1069.54</option>
+          <option>1132.50</option><option>1311.17</option><option>1302.63</option><option>766.25</option><option>982.32</option>
+          <option>1828.92</option><option>2461.80</option><option>1215.47</option><option>1021.89</option><option>1255.02</option>
+          <option>2697.09</option><option>479.77</option><option>401.22</option><option>322.84</option><option>654.45</option>
+          <option>603.67</option><option>710.11</option><option>816.55</option><option>3747.86</option><option>3662.87</option>
+          <option>4110.72</option><option>5390.79</option><option>11556.12</option><option>3867.99</option><option>1295.88</option>
+          <option>13861.76</option><option>17379.76</option><option>17278.65</option><option>64.0</option><option>79.0</option>
+          <option>23.0</option><option>169.0</option><option>25.5</option><option>336.0</option><option>40.0</option>
+        </select>
+
+        <button type="submit" class="btn-custom mt-2">🌱 Predict Yield</button>
+      </form>
+
+      <div class="prediction-result" id="resultBox">
+        <strong>Predicted Yield:</strong> {{prediction}}
+      </div>
+    </div>
+
+    <script>
+      function openForm() {
+        document.querySelector('.center-btn').style.display = 'none';
+        document.getElementById('formContainer').style.display = 'block';
+      }
+    </script>
+
+    <!-- JS Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('.select2').select2({
+          placeholder: "Select an option",
+          allowClear: true,
+          width: '100%'
+        });
+      });
+    </script>
+  </body>
+</html>
+
+
+
+
